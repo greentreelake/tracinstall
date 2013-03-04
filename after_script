@@ -7,7 +7,7 @@ pwd
 sudo bash -c env
 uname -a
 #########################
-echo testing 1 2 3 4
+echo testing 1 2 3 4 5
 #########################
 
 date
