@@ -2,12 +2,12 @@
 
 set -x
 
-wget http://download.edgewall.org/trac/Trac-1.0.1.tar.gz
+#wget http://download.edgewall.org/trac/Trac-1.0.1.tar.gz
 
-gunzip Trac-1.0.1.tar.gz
+#gunzip Trac-1.0.1.tar.gz
 
-tar xf Trac-1.0.1.tar
-rm Trac-1.0.1.tar
+#tar xf Trac-1.0.1.tar
+#rm Trac-1.0.1.tar
 
 wget http://peak.telecommunity.com/dist/ez_setup.py
 python ez_setup.py
@@ -21,8 +21,6 @@ sudo yum install babel
 
 sudo install docutils
 
-sudo yum install mercurial
-
 sudo easy_install Pygments
 
 sudo easy_install --upgrade pyte
@@ -34,18 +32,20 @@ TRACNAME=tracproj$$
 
 mkdir $TRACPROJ
 
-trac-admin $TRACPROJ initenv $TRACNAME 
+cd $TRACPROJ
+
+trac-admin $TRACPROJ initenv $TRACNAME sqlite:db/trac.db git repo 
 
 trac-admin $TRACPROJ permissions add admin TRAC_ADMIN
 
 git clone git://github.com/sitaramc/gitolite
 
-gitolite/install -lngitolite_install
+gitolite/install -ln gitolite_install
 
 sudo yum install cpan
 
 sudo cpan install Time::HiRes
 
-ssh-keygen -t -rsa -C "$$"
+ssh-keygen -f id_rsa-$$ -t rsa -C "$$" -N "$$"
 
 
