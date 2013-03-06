@@ -42,6 +42,8 @@ sudo trac-admin $TRACPROJ permission add admin TRAC_ADMIN
 
 git clone git://github.com/sitaramc/gitolite
 
+mkdir gitolite_install
+
 gitolite/install -ln gitolite_install
 
 patch gitolite/src/gitolite < gitolite.patch
@@ -62,11 +64,9 @@ sudo pip install virtualenv
 
 virtualenv python
 
-cd python/bin
+sudo yum install postgresql-devel
 
 sudo easy_install -U trunk
-
-cd ../trac
 
 htpasswd tim ffcb abc1234 > .passwords
 
@@ -74,7 +74,7 @@ wget http://sqlite.org/sqlite-shell-linux-x86-3071502.zip
 
 unzip *.zip
 
-sudo yum install pysqlte
+sudo yum install pysqlite
 
 #######################################
 ## nohup tracd --port 8010 ~/tracproj &
@@ -82,6 +82,9 @@ sudo yum install pysqlte
 
 rm -rf gitolite
 rm -rf python
-sudo rm fid*
+chmod +w my_login-* 
+rm -f my_login*
+rm -rf python 
+rm -rf gitolite
 
 cd $GPWD
