@@ -44,13 +44,19 @@ git clone git://github.com/sitaramc/gitolite
 
 gitolite/install -ln gitolite_install
 
-sudo cp ./gitolite/src/gitolite-shell /usr/libexec/gitolite 
+patch gitolite/src/gitolite < gitolite.patch
+
+patch gitolite/src/gitolite-shell < gitolite-shell.patch
+
+sudo cp ./gitolite/src/* /usr/libexec/gitolite 
+
+sudo cp ./gitolite/src/gitolite /usr/local/bin/gitolite 
+
+ssh-keygen -f my_login-$$ -t rsa -C "my_email@address.com" -N "$$"
 
 sudo yum install cpan
 
 sudo cpan install Time::HiRes
-
-ssh-keygen -f fid_rsa-$$ -t rsa -C "$$" -N "$$"
 
 sudo pip install virtualenv
 
@@ -62,7 +68,7 @@ sudo easy_install -U trunk
 
 cd ../trac
 
-htpasswd tim ffcb abc1234
+htpasswd tim ffcb abc1234 > .passwords
 
 wget http://sqlite.org/sqlite-shell-linux-x86-3071502.zip
 
@@ -76,5 +82,6 @@ sudo yum install pysqlte
 
 rm -rf gitolite
 rm -rf python
+sudo rm fid*
 
 cd $GPWD
