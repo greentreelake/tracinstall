@@ -94,6 +94,8 @@ sudo chown -R ec2-user tracproj
 
 sudo chmod -R +w tracproj
 
+patch tracproj/conf/trac.ini < trac.ini.patch
+
 #######################################
 tracd --port 8020 $TRACPROJ
 #######################################
