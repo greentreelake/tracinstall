@@ -31,14 +31,10 @@ sudo easy_install --upgrade pyte
 
 sudo easy_install Trac==1.0
 
-TRACPROJ=~/tracproj$$
-TRACNAME=tracproj$$
+export TRACPROJ=tracproj
+export TRACNAME=tracproj
 
 mkdir $TRACPROJ
-
-trac-admin $TRACPROJ initenv $TRACNAME sqlite:db/trac.db git repo 
-
-sudo trac-admin $TRACPROJ permission add admin TRAC_ADMIN
 
 git clone git://github.com/sitaramc/gitolite
 
@@ -54,7 +50,7 @@ sudo cp ./gitolite/src/* /usr/libexec/gitolite
 
 sudo cp ./gitolite/src/gitolite /usr/local/bin/gitolite 
 
-ssh-keygen -f my_login-$$ -t rsa -C "my_email@address.com" -N "$$"
+ssh-keygen -f my_login -t rsa -C "my_email@address.com" -N "$$"
 
 sudo yum install cpan
 
@@ -68,23 +64,37 @@ sudo yum install postgresql-devel
 
 sudo easy_install -U trunk
 
-htpasswd tim ffcb abc1234 > .passwords
+htpasswd my_login proj abc1234 > .passwords
 
 wget http://sqlite.org/sqlite-shell-linux-x86-3071502.zip
 
-unzip *.zip
+unzip sqlite-shell-linux-x86-3071502.zip
 
-sudo yum install pysqlite
+rm sqlite-shell-linux-x86-3071502.zip
+
+wget http://pysqlite.googlecode.com/files/pysqlite-2.6.3.tar.gz
+
+gunzip pysqlite-2.6.3.tar.gz
+
+tar xf pysqlite-2.6.3.tar
+
+rm pysqlite-2.6.3.tar
+
+git init --bare repo
+
+chmod -R +rw repo
+
+sqlite3 trac.db ""
+
+sudo trac-admin $TRACPROJ initenv $TRACNAME sqlite:db/trac.db git `pwd`/repo 
+
+sudo trac-admin $TRACPROJ permission add admin TRAC_ADMIN
+
+sudo chown -R ec2-user tracproj
+
+sudo chmod -R +w tracproj
 
 #######################################
-## nohup tracd --port 8010 ~/tracproj &
+tracd --port 8020 $TRACPROJ
 #######################################
 
-rm -rf gitolite
-rm -rf python
-chmod +w my_login-* 
-rm -f my_login*
-rm -rf python 
-rm -rf gitolite
-
-cd $GPWD
