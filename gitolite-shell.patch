@@ -1,0 +1,4 @@
+8c8
+< BEGIN { $ENV{GL_BINDIR} = $FindBin::RealBin; }
+---
+> BEGIN { $ENV{GL_BINDIR} = "/usr/libexec/gitolite"; }
