@@ -86,7 +86,7 @@ chmod -R +rw repo
 
 sqlite3 trac.db ""
 
-sudo trac-admin $TRACPROJ initenv $TRACNAME sqlite:db/trac.db git `pwd`/repo 
+sudo trac-admin $TRACPROJ initenv $TRACNAME sqlite:db/trac.db git `pwd`/repo
 
 sudo trac-admin $TRACPROJ permission add admin TRAC_ADMIN
 

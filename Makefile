@@ -2,6 +2,7 @@ all: clean
 	./get_software.sh
 clean:
 	rm -f my_login
+	rm -f my_login.pub
 	rm -rf python 
 	rm -rf gitolite
 	sudo rm -rf tracproj
