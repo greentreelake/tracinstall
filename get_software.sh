@@ -13,6 +13,8 @@ set -x
 
 GPWD=`pwd`
 
+sudo useradd -b /home -s bin/bash git
+
 wget http://peak.telecommunity.com/dist/ez_setup.py
 python ez_setup.py
 rm ez_setup.py
@@ -38,19 +40,27 @@ mkdir $TRACPROJ
 
 git clone git://github.com/sitaramc/gitolite
 
-mkdir gitolite_install
-
-gitolite/install -ln gitolite_install
-
 patch gitolite/src/gitolite < gitolite.patch
 
 patch gitolite/src/gitolite-shell < gitolite-shell.patch
 
+sudo mkdir -p /usr/libexec/gitolite
+
 sudo cp ./gitolite/src/* /usr/libexec/gitolite 
+
+sudo cp -r ./gitolite/src/lib /usr/libexec/gitolite
 
 sudo cp ./gitolite/src/gitolite /usr/local/bin/gitolite 
 
+#gitolite/install -ln gitolite_install
+gitolite/install -ln 
+
 ssh-keygen -f my_login -t rsa -C "my_email@address.com" -N "$$"
+
+export PERL5LIB="$PERL5LIB:$PWD/gitolite/src/lib"
+
+#ec2-user.pub came from client machine.
+gitolite setup -pk ~/.ssh/ec2-user.pub
 
 sudo yum install cpan
 
@@ -64,7 +74,7 @@ sudo yum install postgresql-devel
 
 sudo easy_install -U trunk
 
-htpasswd my_login proj abc1234 > .passwords
+htpasswd trac_login proj abc1234 > .passwords
 
 wget http://sqlite.org/sqlite-shell-linux-x86-3071502.zip
 
