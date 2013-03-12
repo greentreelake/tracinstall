@@ -76,6 +76,7 @@ sudo yum --enablerepo=epel -y install gitolite
 #
 #THERE
 
+wget https://pypi.python.org/packages/source/t/trac-GitolitePlugin/trac-GitolitePlugin-0.3.1.tar.gz
 
 sudo yum install cpan
 
