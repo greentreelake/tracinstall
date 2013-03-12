@@ -98,6 +98,8 @@ unzip sqlite-shell-linux-x86-3071502.zip
 
 rm sqlite-shell-linux-x86-3071502.zip
 
+sudo cp sqlite3 /usr/bin
+
 wget http://pysqlite.googlecode.com/files/pysqlite-2.6.3.tar.gz
 
 gunzip pysqlite-2.6.3.tar.gz
