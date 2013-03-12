@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PERL5LIB="$PERL5LIB:$PWD/gitolite/src/lib"
+
 htpasswd() {
 	user=$1
 	realm=$2
@@ -13,10 +15,12 @@ set -x
 
 GPWD=`pwd`
 
-sudo useradd -b /home -s bin/bash git
+#sudo useradd -b /home -s bin/bash git
 
 wget http://peak.telecommunity.com/dist/ez_setup.py
+
 python ez_setup.py
+
 rm ez_setup.py
 
 sudo easy_install genshi
@@ -44,23 +48,47 @@ patch gitolite/src/gitolite < gitolite.patch
 
 patch gitolite/src/gitolite-shell < gitolite-shell.patch
 
-sudo mkdir -p /usr/libexec/gitolite
+#################################
+#sudo mkdir -p /usr/libexec/gitolite
+#
+#sudo cp ./gitolite/src/* /usr/libexec/gitolite 
+#
+#sudo cp -r ./gitolite/src/lib /usr/libexec/gitolite
+#
+#sudo cp ./gitolite/src/gitolite /usr/local/bin/gitolite 
+#
+#gitolite/install -ln 
+#
+#gitolite setup -pk ~/.ssh/id_rsa.git.pub
+#################################
 
-sudo cp ./gitolite/src/* /usr/libexec/gitolite 
 
-sudo cp -r ./gitolite/src/lib /usr/libexec/gitolite
+sudo yum --enablerepo=epel -y install gitolite
 
-sudo cp ./gitolite/src/gitolite /usr/local/bin/gitolite 
+cat > ~/gitolite_config <<HERE
+host GitServer 
+  user gitolite
+  hostname localhost #10.0.0.31# Git server's hostname or IP address
+  port 22
+  identityfile ~/.ssh/gitadmin # specify private key
+HERE
 
-#gitolite/install -ln gitolite_install
-gitolite/install -ln 
+sudo su - git<<THERE
 
-ssh-keygen -f my_login -t rsa -C "my_email@address.com" -N "$$"
+ssh-keygen -f gitadmin -t rsa -C "Gitolite's initial admin.pub file" -N ""
 
-export PERL5LIB="$PERL5LIB:$PWD/gitolite/src/lib"
+gl-setup ~/.ssh/gitadmin.pub
 
-#ec2-user.pub came from client machine.
-gitolite setup -pk ~/.ssh/ec2-user.pub
+cp ~ec2-user/gitolite_config ~/.ssh/config
+
+chown git ~/.ssh/config
+chmod 600 ~/.ssh/config
+
+git config --global user.name "gitolite" 
+git config --global user.email "gitolite@server.world"
+
+THERE
+
 
 sudo yum install cpan
 
@@ -107,6 +135,6 @@ sudo chmod -R +w tracproj
 patch tracproj/conf/trac.ini < trac.ini.patch
 
 #######################################
-tracd --port 8020 $TRACPROJ
+# tracd --port 8020 $TRACPROJ
 #######################################
 
