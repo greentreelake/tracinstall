@@ -65,29 +65,16 @@ patch gitolite/src/gitolite-shell < gitolite-shell.patch
 
 sudo yum --enablerepo=epel -y install gitolite
 
-cat > ~/gitolite_config <<HERE
-host GitServer 
-  user gitolite
-  hostname localhost #10.0.0.31# Git server's hostname or IP address
-  port 22
-  identityfile ~/.ssh/gitadmin # specify private key
-HERE
-
-sudo su - git<<THERE
-
-ssh-keygen -f gitadmin -t rsa -C "Gitolite's initial admin.pub file" -N ""
-
-gl-setup ~/.ssh/gitadmin.pub
-
-cp ~ec2-user/gitolite_config ~/.ssh/config
-
-chown git ~/.ssh/config
-chmod 600 ~/.ssh/config
-
-git config --global user.name "gitolite" 
-git config --global user.email "gitolite@server.world"
-
-THERE
+#sudo su - git<<THERE
+#
+#set -x
+#
+#gl-setup ~/.ssh/git.pub
+#
+#git config --global user.name "gitolite" 
+#git config --global user.email "gitolite@server.world"
+#
+#THERE
 
 
 sudo yum install cpan
